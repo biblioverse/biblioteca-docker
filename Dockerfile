@@ -23,7 +23,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     p7zip-full \
     sudo \
     supervisor \
-    tesseract-ocr \
     unrar \
     unzip \
     vim \
