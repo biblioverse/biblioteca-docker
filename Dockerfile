@@ -1,4 +1,4 @@
-FROM php:8.2-apache-bookworm
+FROM php:8.4-apache-bookworm
 
 RUN curl -sL https://deb.nodesource.com/setup_20.x | bash -
 
@@ -23,7 +23,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     p7zip-full \
     sudo \
     supervisor \
-    tesseract-ocr \
     unrar \
     unzip \
     vim \
@@ -51,8 +50,8 @@ RUN \
     if [ -z ${KEPUBIFY_RELEASE+x} ]; then \
     KEPUBIFY_RELEASE=$(curl -sX GET "https://api.github.com/repos/pgaskin/kepubify/releases/latest" \
     | awk '/tag_name/{print $4;exit}' FS='[""]'); \
-  fi && \
-  curl -o \
+    fi && \
+    curl -o \
     /usr/bin/kepubify -L \
     https://github.com/pgaskin/kepubify/releases/download/${KEPUBIFY_RELEASE}/kepubify-linux-64bit && \
     chmod +x /usr/bin/kepubify
