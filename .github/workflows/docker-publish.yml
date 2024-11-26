@@ -2,17 +2,19 @@ name: Build
 
 # Controls when the workflow will run
 on:
+  pull_request: ~
+  schedule:
+    - cron: '0 0 * * 5'
   push:
     branches:
       - 'main'
-      - 'dev'
     tags:
       - 'v*.*.*'
   release:
     types: [published]
 
 # permissions are needed if pushing to ghcr.io
-permissions: 
+permissions:
   packages: write
   contents: read
 
@@ -60,4 +62,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.biblioteca.outputs.tags }}
           labels: ${{ steps.biblioteca.outputs.labels }}
-          
