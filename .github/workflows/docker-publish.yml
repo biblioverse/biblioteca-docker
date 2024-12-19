@@ -10,6 +10,7 @@ on:
       - 'main'
     tags:
       - 'v*.*.*'
+      - 'dev-*'
   release:
     types: [published]
 
