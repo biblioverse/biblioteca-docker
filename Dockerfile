@@ -21,6 +21,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     nodejs \
     openssl \
     p7zip-full \
+    p7zip-rar \ 
     sudo \
     supervisor \
     unrar \
