@@ -45,6 +45,9 @@ RUN install-php-extensions \
     imagick \
     @composer
 
+# Increase available space to avoid imagick crashes https://github.com/ImageMagick/ImageMagick/issues/396
+RUN sed -i '/<policy domain="resource" name="disk"/c\  <policy domain="resource" name="disk" value="8GiB"/>/' /etc/ImageMagick-6/policy.xml
+
 # Install kepubify (from https://github.com/linuxserver/docker-calibre-web/blob/master/Dockerfile)
 COPY docker/get_kepubify_url.sh /usr/bin/get_kepubify_url.sh
 RUN chmod +x /usr/bin/get_kepubify_url.sh ; \
