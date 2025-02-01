@@ -7,6 +7,11 @@ ENV COMPOSER_HOME=/home/.composer
 RUN mkdir -p /home/.composer
 RUN printf "deb http://http.us.debian.org/debian stable main contrib non-free" > /etc/apt/sources.list.d/nonfree.list
 
+# auto install dependencies and remove libs after installing ext: https://github.com/mlocati/docker-php-extension-installer
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+
+COPY docker/install.sh /usr/bin/install.sh
+
 # npm is included in nodejs, see https://askubuntu.com/a/1432138
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     apt-transport-https \
@@ -29,14 +34,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     vim \
     wget  \
     zip \
-    && rm -rf /var/lib/apt/lists/*
-
-# auto install dependencies and remove libs after installing ext: https://github.com/mlocati/docker-php-extension-installer
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-
-COPY docker/install.sh /usr/bin/install.sh
-
-RUN chmod +x /usr/bin/install.sh && /usr/bin/install.sh \
+    && chmod +x /usr/bin/install.sh \
+    && /usr/bin/install.sh \
     opcache \
     intl \
     pdo_mysql \
@@ -45,7 +44,8 @@ RUN chmod +x /usr/bin/install.sh && /usr/bin/install.sh \
     exif \
     gd \
     imagick \
-    @composer
+    @composer \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install kepubify (from https://github.com/linuxserver/docker-calibre-web/blob/master/Dockerfile)
 COPY docker/get_kepubify_url.sh /usr/bin/get_kepubify_url.sh

@@ -6,7 +6,7 @@ install_php_extension() {
 
     echo "[$(date +"%H:%M:%S")][$extension] Installing PHP extension"
 
-    output=$(docker-php-ext-install "$extension" 2>&1)
+    output=$(install-php-extensions "$extension" 2>&1)
     if [ $? -ne 0 ]; then
         echo "[$(date +"%H:%M:%S")][$extension] Failed to install PHP extension"
         echo "$output"
