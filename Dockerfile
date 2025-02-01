@@ -37,7 +37,6 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 RUN install-php-extensions \
     opcache \
-    intl \
     pdo_mysql \
     zip \
     bcmath \
