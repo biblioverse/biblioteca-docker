@@ -15,24 +15,15 @@ COPY docker/install.sh /usr/bin/install.sh
 # npm is included in nodejs, see https://askubuntu.com/a/1432138
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     apt-transport-https \
-    build-essential \
     ca-certificates \
-    cron \
-    curl \
     dma  \
     ghostscript \
-    git \
     mariadb-client \
-    nodejs \
     openssl \
     p7zip-full \
     p7zip-rar \ 
-    sudo \
-    supervisor \
     unrar \
     unzip \
-    vim \
-    wget  \
     zip \
     && chmod +x /usr/bin/install.sh \
     && /usr/bin/install.sh \
