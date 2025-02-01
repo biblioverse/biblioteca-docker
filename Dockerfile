@@ -36,7 +36,16 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 COPY docker/install.sh /usr/bin/install.sh
 
-RUN chmod +x /usr/bin/install.sh && /usr/bin/install.sh
+RUN chmod +x /usr/bin/install.sh && /usr/bin/install.sh \
+    opcache \
+    intl \
+    pdo_mysql \
+    zip \
+    bcmath \
+    exif \
+    gd \
+    imagick \
+    @composer
 
 # Install kepubify (from https://github.com/linuxserver/docker-calibre-web/blob/master/Dockerfile)
 COPY docker/get_kepubify_url.sh /usr/bin/get_kepubify_url.sh
