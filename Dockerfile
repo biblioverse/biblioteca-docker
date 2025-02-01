@@ -7,43 +7,25 @@ ENV COMPOSER_HOME=/home/.composer
 RUN mkdir -p /home/.composer
 RUN printf "deb http://http.us.debian.org/debian stable main contrib non-free" > /etc/apt/sources.list.d/nonfree.list
 
-# npm is included in nodejs, see https://askubuntu.com/a/1432138
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
-    apt-transport-https \
-    build-essential \
-    ca-certificates \
-    cron \
-    curl \
-    dma  \
-    ghostscript \
-    git \
-    mariadb-client \
-    nodejs \
-    openssl \
-    p7zip-full \
-    p7zip-rar \ 
-    sudo \
-    supervisor \
-    unrar \
-    unzip \
-    vim \
-    wget  \
-    zip \
-    && rm -rf /var/lib/apt/lists/*
-
 # auto install dependencies and remove libs after installing ext: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
+ENV PACKAGES="apt-transport-https ca-certificates cron dma ghostscript mariadb-client nodejs openssl supervisor"
+ENV PACKAGES_DEV="curl git sudo vim wget"
+ENV PACKAGES_COMPRESS="p7zip-full p7zip-rar unrar unzip zip"
+ENV PACKAGES_PHP="libicu72"
+ENV PACKAGES_PHP_VOLATILE="libicu-dev"
 
-RUN install-php-extensions \
-    opcache \
-    pdo_mysql \
-    zip \
-    bcmath \
-    exif \
-    gd \
-    imagick \
-    @composer
+ENV PHP_PACKAGES="opcache pdo_mysql zip bcmath exif gd imagick @composer"
+
+# npm is included in nodejs, see https://askubuntu.com/a/1432138
+RUN DEBIAN_FRONTEND=noninteractive apt-get update \
+    && apt-get install -y ${PACKAGES} ${PACKAGES_DEV} ${PACKAGES_COMPRESS} ${PACKAGES_PHP} ${PACKAGES_PHP_VOLATILE} \
+    && install-php-extensions ${PHP_PACKAGES} \
+    && docker-php-ext-install intl \
+    && docker-php-ext-enable intl \
+    && apt-get purge ${PACKAGES_PHP_VOLATILE} -y \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install kepubify (from https://github.com/linuxserver/docker-calibre-web/blob/master/Dockerfile)
 COPY docker/get_kepubify_url.sh /usr/bin/get_kepubify_url.sh
