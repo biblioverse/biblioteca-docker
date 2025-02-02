@@ -34,4 +34,4 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
 # auto install dependencies and remove libs after installing ext: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions intl
+RUN install-php-extensions opcache intl
