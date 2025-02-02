@@ -27,8 +27,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     zip \
     && chmod +x /usr/bin/install.sh \
     && /usr/bin/install.sh \
-    opcache \
     intl \
+    opcache \
     pdo_mysql \
     zip \
     bcmath \
