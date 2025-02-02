@@ -1,7 +1,5 @@
 FROM php:8.3-apache-bookworm
 
-RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
-
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_HOME=/home/.composer
 RUN mkdir -p /home/.composer
@@ -18,12 +16,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     ghostscript \
     git \
     mariadb-client \
-    nodejs \
     openssl \
     p7zip-full \
     p7zip-rar \ 
-    sudo \
-    supervisor \
     unrar \
     unzip \
     vim \
