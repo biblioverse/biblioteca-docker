@@ -1,4 +1,4 @@
-FROM php:8.3.15-apache-bookworm
+FROM php:8.4.3-apache-bookworm
 
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
 
