@@ -27,14 +27,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     zip \
     && chmod +x /usr/bin/install.sh \
     && /usr/bin/install.sh \
-    intl \
-    gd \
-    opcache \
-    pdo_mysql \
-    zip \
     bcmath \
     exif \
+    gd \
     imagick \
+    intl \
+    opcache \
+    pdo_mysql \
+    redis \
+    zip \
     @composer \
     && rm -rf /var/lib/apt/lists/*
 
