@@ -20,14 +20,11 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     steps:
   # Get the repository's code
       - name: Checkout
         uses: actions/checkout@v4
-      # https://github.com/docker/setup-qemu-action
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
       # https://github.com/docker/setup-buildx-action
       - name: Set up Docker Buildx
         id: buildx
