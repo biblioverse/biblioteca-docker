@@ -24,7 +24,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     p7zip-rar \
     unrar \
     unzip \
-    wget  \
     zip \
     && chmod +x /usr/bin/install.sh \
     && /usr/bin/install.sh \
