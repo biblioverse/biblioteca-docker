@@ -1,4 +1,4 @@
-FROM php:8.3-apache-bookworm
+FROM dunglas/frankenphp:1-php8.3
 
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
 
@@ -26,7 +26,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     supervisor \
     unrar \
     unzip \
-    vim \
     wget  \
     zip \
     && rm -rf /var/lib/apt/lists/*
@@ -44,6 +43,7 @@ RUN install-php-extensions \
     exif \
     gd \
     imagick \
+    apcu \
     @composer
 
 # Install kepubify (from https://github.com/linuxserver/docker-calibre-web/blob/master/Dockerfile)
@@ -51,12 +51,7 @@ COPY docker/get_kepubify_url.sh /usr/bin/get_kepubify_url.sh
 RUN chmod +x /usr/bin/get_kepubify_url.sh ; \
     URL=$(/usr/bin/get_kepubify_url.sh) && curl -f -vvv -o /usr/bin/kepubify -L "$URL" && chmod +x /usr/bin/kepubify
 
-RUN a2enmod rewrite
-
-COPY docker/001-biblioteca.conf /etc/apache2/sites-enabled/001-biblioteca.conf
 RUN touch /var/www/.bash_history && chmod 777 /var/www/.bash_history
-# Run from unprivileged port 8080 only
-RUN sed -e 's/Listen 80/Listen 8080/g' -i /etc/apache2/ports.conf
 
 COPY ./docker/dma.conf /etc/dma/dma.conf
 COPY ./docker/biblioteca.ini /usr/local/etc/php/conf.d/biblioteca.ini
@@ -74,4 +69,8 @@ RUN mkdir -p /var/www/.npm && chown -R $UID:$GID /var/www/.npm
 USER www-data
 
 WORKDIR /var/www/html
-CMD ["docker-php-entrypoint", "apache2-foreground"]
+COPY docker/Caddyfile /etc/caddy/Caddyfile
+
+EXPOSE 8080
+
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
