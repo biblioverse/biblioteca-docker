@@ -4,16 +4,11 @@
     servers {
         protocols h1 h2 h3
     }
-}
-
-:8080, :8443 {
     root * /var/www/html/public
     try_files {path} index.php
-
     php_server {
         index index.php
     }
-
     encode zstd br gzip
 
     file_server
@@ -21,4 +16,13 @@
     handle_errors {
         respond "{http.error.status_code} {http.error.status_text}"
     }
+}
+
+:8080 {
+    root * /var/www/html/public
+}
+
+:8443 {
+    tls internal
+    root * /var/www/html/public
 }
