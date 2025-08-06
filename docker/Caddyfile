@@ -4,25 +4,35 @@
     servers {
         protocols h1 h2 h3
     }
-    root * /var/www/html/public
-    try_files {path} index.php
-    php_server {
-        index index.php
-    }
-    encode zstd br gzip
-
-    file_server
-
-    handle_errors {
-        respond "{http.error.status_code} {http.error.status_text}"
-    }
 }
 
 :8080 {
     root * /var/www/html/public
+    encode zstd br gzip
+    try_files {path} index.php
+
+    handle_errors {
+        respond "{http.error.status_code} {http.error.status_text}"
+    }
+    php_server {
+        index index.php
+    }
+
+    file_server
 }
 
 :8443 {
     tls internal
     root * /var/www/html/public
+    encode zstd br gzip
+    try_files {path} index.php
+
+    handle_errors {
+        respond "{http.error.status_code} {http.error.status_text}"
+    }
+    php_server {
+        index index.php
+    }
+
+    file_server
 }
