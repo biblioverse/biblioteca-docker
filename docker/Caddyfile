@@ -4,6 +4,7 @@
     servers {
         protocols h1 h2 h3
     }
+    tls internal
 }
 
 :8080 {
@@ -22,7 +23,6 @@
 }
 
 :8443 {
-    tls internal
     root * /var/www/html/public
     encode zstd br gzip
     try_files {path} index.php
