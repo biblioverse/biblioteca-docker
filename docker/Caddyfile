@@ -1,4 +1,5 @@
 {
+    auto_https off
     frankenphp
     order php_server before file_server
     servers {
@@ -6,33 +7,19 @@
     }
 }
 
-localhost:8080 {
+:8080 {
     root * /var/www/html/public
-    encode zstd br gzip
+
+    php_server {
+        index index.php
+    }
     try_files {path} index.php
+
+    encode zstd br gzip
+
+    file_server
 
     handle_errors {
         respond "{http.error.status_code} {http.error.status_text}"
     }
-    php_server {
-        index index.php
-    }
-
-    file_server
-}
-
-localhost:8443 {
-    root * /var/www/html/public
-    encode zstd br gzip
-    try_files {path} index.php
-    tls internal
-
-    handle_errors {
-        respond "{http.error.status_code} {http.error.status_text}"
-    }
-    php_server {
-        index index.php
-    }
-
-    file_server
 }
