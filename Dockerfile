@@ -1,7 +1,5 @@
 FROM dunglas/frankenphp:1-php8.3
 
-RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
-
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_HOME=/home/.composer
 RUN mkdir -p /home/.composer
@@ -12,10 +10,8 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 
 COPY docker/install.sh /usr/bin/install.sh
 
-# npm is included in nodejs, see https://askubuntu.com/a/1432138
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     apt-transport-https \
-    ca-certificates \
     dma  \
     ghostscript \
     mariadb-client \
@@ -27,18 +23,19 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     zip \
     && chmod +x /usr/bin/install.sh \
     && /usr/bin/install.sh \
-    intl \
-    gd \
-    opcache \
-    pdo_mysql \
-    zip \
-    bcmath \
-    exif \
-    imagick \
     @composer \
-    apcu \
-    @composer \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+
+RUN install-php-extensions \
+	pdo_mysql \
+	gd \
+	intl \
+	zip \
+	opcache \
+	imagick \
+	exif \
+	bcmath \
+    apcu
 
 # Install kepubify (from https://github.com/linuxserver/docker-calibre-web/blob/master/Dockerfile)
 COPY docker/get_kepubify_url.sh /usr/bin/get_kepubify_url.sh
@@ -51,20 +48,16 @@ COPY ./docker/dma.conf /etc/dma/dma.conf
 COPY ./docker/biblioteca.ini /usr/local/etc/php/conf.d/biblioteca.ini
 COPY ./docker/policy.xml /etc/ImageMagick-6/policy.xml
 
-ARG UNAME=www-data
-ARG UGROUP=www-data
-ARG UID=1000
-ARG GID=1000
-RUN usermod  --uid $UID $UNAME
-RUN groupmod --gid $GID $UGROUP
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
 
 RUN mkdir -p /var/www/.npm && chown -R $UID:$GID /var/www/.npm
 
-USER www-data
 
 WORKDIR /var/www/html
 COPY docker/Caddyfile /etc/caddy/Caddyfile
 
 EXPOSE 8080
+EXPOSE 8443
+EXPOSE 8443/udp
 
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]

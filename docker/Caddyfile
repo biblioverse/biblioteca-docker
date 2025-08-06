@@ -1,11 +1,14 @@
 {
-    auto_https off
     frankenphp
     order php_server before file_server
+    servers {
+        protocols h1 h2 h3
+    }
 }
 
-:8080 {
+:8080, :8443 {
     root * /var/www/html/public
+    try_files {path} index.php
 
     php_server {
         index index.php
