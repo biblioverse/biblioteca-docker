@@ -5,11 +5,6 @@ ENV COMPOSER_HOME=/home/.composer
 RUN mkdir -p /home/.composer
 RUN printf "deb http://http.us.debian.org/debian stable main contrib non-free" > /etc/apt/sources.list.d/nonfree.list
 
-# auto install dependencies and remove libs after installing ext: https://github.com/mlocati/docker-php-extension-installer
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
-
-COPY docker/install.sh /usr/bin/install.sh
-
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     apt-transport-https \
     dma  \
@@ -21,10 +16,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y \
     unrar \
     unzip \
     zip \
-    && chmod +x /usr/bin/install.sh \
-    && /usr/bin/install.sh \
-    @composer \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN install-php-extensions \
 	pdo_mysql \
@@ -35,7 +27,8 @@ RUN install-php-extensions \
 	imagick \
 	exif \
 	bcmath \
-    apcu
+    apcu \
+    @composer
 
 # Install kepubify (from https://github.com/linuxserver/docker-calibre-web/blob/master/Dockerfile)
 COPY docker/get_kepubify_url.sh /usr/bin/get_kepubify_url.sh
