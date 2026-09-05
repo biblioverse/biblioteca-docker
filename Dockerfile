@@ -1,4 +1,4 @@
-FROM php:8.5.9-apache-trixie
+FROM php:8.5.10-apache-trixie
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_HOME=/home/.composer
