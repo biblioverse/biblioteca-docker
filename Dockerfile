@@ -28,13 +28,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
         zip \
     && chmod +x /usr/bin/install.sh \
     && /usr/bin/install.sh \
-        intl \
-        gd \
-        pdo_mysql \
-        zip \
         bcmath \
         exif \
+        gd \
         imagick \
+        intl \
+        pdo_mysql \
+        redis \
+        zip \
         @composer \
     && rm -rf /var/lib/apt/lists/*
 
